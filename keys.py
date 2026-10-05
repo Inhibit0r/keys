@@ -455,8 +455,6 @@ RAINBOW = [  # the selection arrow
 ]
 GAP = 3  # columns on each side of a credit bar
 TRACK = 238  # the empty part of a credit bar
-BAND = "\U0001fb0b"  # BLOCK SEXTANT-34: the middle third of a cell, full width
-HALF_BAND = "\U0001fb03"  # BLOCK SEXTANT-3: its left half
 HEAD_W = 89 + 4 + 17  # banner, gap, flask: the widest the screen gets
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 NOISE = "▓▒░<>/\\#*+=_"
@@ -636,13 +634,13 @@ def credit_cell(state, t, bar, stats_w):
         return paint(UI["dim"], f"{left} left")
     ratio = max(0.0, min(1.0, left / total))
     color = UI["ok"] if ratio > 0.5 else UI["warn"] if ratio > 0.2 else UI["err"]
-    # Sextant blocks are drawn by the terminal itself, cell-exact: segments meet side by
-    # side with no overlap. The middle band sits on the text line, rows stay apart, and
-    # its left half on the edge doubles the resolution.
-    full, half = divmod(round(ratio * bar * 2), 2)
+    # Box-drawing lines are drawn by the terminal itself, cell-exact and centred on the text
+    # line: segments meet side by side, rows stay apart. Whole cells only, so the fill runs
+    # straight into the track with no half-empty cell between them.
+    full = int(ratio * bar + 0.5)
     return (
-        paint(color, BAND * full + HALF_BAND * half)
-        + paint(TRACK, BAND * (bar - full - half))
+        paint(color, "━" * full)
+        + paint(TRACK, "━" * (bar - full))
         + " " * (GAP + stats_w - len(stats(state)))
         + paint(color, str(left))
         + paint(UI["dim"], f"/{total}")
