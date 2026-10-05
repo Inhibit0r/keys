@@ -13,6 +13,7 @@ Never syncs keys and never rotates by itself.
   keys next <service>            activate the next stored key
   keys remove <service> <label>  forget a stored key (the active key stays active)
   keys check [service] [--all]   remaining credits of the active (or every) key
+  keys --version                 print the version
 """
 
 import getpass
@@ -32,6 +33,7 @@ from contextlib import contextmanager, redirect_stdout
 from functools import lru_cache
 from pathlib import Path
 
+__version__ = "1.1.0"
 HOME = Path.home()
 STORE = HOME / ".config/api-keys"
 WINDOWS = os.name == "nt"
@@ -957,6 +959,9 @@ def main(argv):
         return interactive()
     if not argv or argv[0] in ("-h", "--help", "help"):
         print(__doc__.strip())
+        return
+    if argv[0] == "--version":
+        print(f"keys {__version__}")
         return
     cmd, args = argv[0], argv[1:]
     all_keys = "--all" in args

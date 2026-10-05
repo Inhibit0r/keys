@@ -191,6 +191,11 @@ class KeysTest(unittest.TestCase):
         box = self.keys.box("t", ["a", "\x1b[1mb\x1b[0m"], 20)
         self.assertEqual({self.keys.vlen(line) for line in box}, {20})
 
+    def test_version(self):
+        with redirect_stdout(io.StringIO()) as out:
+            self.keys.main(["--version"])
+        self.assertRegex(out.getvalue().strip(), r"^keys \d+\.\d+\.\d+$")
+
     def test_rejects_shell_injection(self):
         with self.assertRaises(SystemExit):
             self.add("evil", "tvly-x; rm -rf ~")
