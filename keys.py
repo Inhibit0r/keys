@@ -303,14 +303,26 @@ def paint(color, text):
     return f"\x1b[38;5;{color}m{text}\x1b[0m"
 
 
+KERN = {("L", "T"): 2}  # T tucks its bar over the empty top of L, else T looks far away
+
+
 def banner_rows(word):
     """Banner rows as lists of (char, colour) cells."""
     rows = [[] for _ in range(6)]
+    prev = None
     for letter in word:
+        k = KERN.get((prev, letter), 0)
         for r, line in enumerate(BANNER_FONT[letter]):
-            for ch in line:
-                color = 226 if letter == "*" else 28 if ch in "╗║╔╝╚═" else GLOW[r]
-                rows[r].append((ch, color))
+            cells = [
+                (ch, 226 if letter == "*" else 28 if ch in "╗║╔╝╚═" else GLOW[r])
+                for ch in line
+            ]
+            if k:  # overlapping columns keep whichever letter has a glyph there
+                tail = rows[r][-k:]
+                del rows[r][-k:]
+                cells[:k] = [b if b[0] != " " else a for a, b in zip(tail, cells)]
+            rows[r] += cells
+        prev = letter
     return rows
 
 
@@ -455,7 +467,7 @@ RAINBOW = [  # the selection arrow
 ]
 GAP = 3  # columns on each side of a credit bar
 TRACK = 238  # the empty part of a credit bar
-HEAD_W = 89 + 4 + 17  # banner, gap, flask: the widest the screen gets
+HEAD_W = len(banner_rows("ULTRAS*LABS")[0]) + 4 + 17  # banner, gap, flask: widest
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 NOISE = "▓▒░<>/\\#*+=_"
 ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
@@ -567,9 +579,10 @@ def flask_still(t):
 
 def header(t, width):
     """Banner with the flask in the right corner, centred in `width`."""
-    big, glass = banner(t, 89), flask_still(t)
+    w = len(LOGO[0])
+    big, glass = banner(t, w), flask_still(t)
     rows = [
-        (big[r - 3] if 3 <= r < 9 else " " * 89) + "    " + glass[r]
+        (big[r - 3] if 3 <= r < 9 else " " * w) + "    " + glass[r]
         for r in range(len(glass))
     ]
     return [" " * ((width - HEAD_W) // 2) + row for row in rows]

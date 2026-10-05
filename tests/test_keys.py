@@ -96,7 +96,7 @@ class KeysTest(unittest.TestCase):
 
     def test_splash_geometry_and_silence_outside_terminal(self):
         self.assertEqual(
-            {len(row) for row in self.keys.banner_rows("ULTRAS*LABS")}, {89}
+            {len(row) for row in self.keys.banner_rows("ULTRAS*LABS")}, {87}
         )
         self.assertEqual({len(row) for row in self.keys.FLASK}, {17})
         lines = self.keys.flask_frame(3, 5, [(8, 8), (2, 8), (-1, 8)])
@@ -161,7 +161,7 @@ class KeysTest(unittest.TestCase):
 
     def test_banner_and_credit_cells(self):
         k = self.keys
-        self.assertEqual(len(k.banner(0.0, 89)), 6)
+        self.assertEqual(len(k.banner(0.0, 87)), 6)
         self.assertEqual(len(k.banner(0.0, 40)), 1)  # narrow: one line
         head = k.header(0.0, k.HEAD_W)  # banner with the flask in the right corner
         self.assertEqual([k.vlen(line) for line in head], [k.HEAD_W] * len(k.FLASK))
