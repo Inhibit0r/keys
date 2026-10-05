@@ -167,11 +167,11 @@ class KeysTest(unittest.TestCase):
         self.assertEqual([k.vlen(line) for line in head], [k.HEAD_W] * len(k.FLASK))
         self.assertEqual(
             k.ANSI.sub("", k.credit_cell((30, 100, None), 0, 10, 9)),
-            "━━━━━━━━━━      30/100",  # GAP + numbers right-aligned in 9 columns
+            "▄▄▄▄▄▄▄▄▄▄      30/100",  # GAP + numbers right-aligned in 9 columns
         )
-        # 35% of 10 cells: three full cells, a half-line edge, six track cells
+        # 35% of 10 cells: three full cells, a quadrant edge, six track cells
         self.assertEqual(
-            k.ANSI.sub("", k.credit_cell((35, 100, None), 0, 10, 9))[:10], "━━━╸━━━━━━"
+            k.ANSI.sub("", k.credit_cell((35, 100, None), 0, 10, 9))[:10], "▄▄▄▖▄▄▄▄▄▄"
         )
         self.assertIn("HTTP 401", k.credit_cell((None, None, "HTTP 401"), 0, 10, 9))
         self.assertIn("checking", k.credit_cell(None, 0, 10, 9))

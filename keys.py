@@ -634,12 +634,13 @@ def credit_cell(state, t, bar, stats_w):
         return paint(UI["dim"], f"{left} left")
     ratio = max(0.0, min(1.0, left / total))
     color = UI["ok"] if ratio > 0.5 else UI["warn"] if ratio > 0.2 else UI["err"]
-    # Box-drawing lines are drawn by the terminal itself, cell-exact: segments meet side by
-    # side with no overlap and rows stay apart. A half line "╸" doubles the resolution.
+    # Block elements are drawn by the terminal itself, cell-exact: segments meet side by
+    # side with no overlap. Lower half blocks leave the top half of each row as a gap, so
+    # rows stay apart; the quadrant "▖" on the edge doubles the resolution.
     full, half = divmod(round(ratio * bar * 2), 2)
     return (
-        paint(color, "━" * full + "╸" * half)
-        + paint(TRACK, "━" * (bar - full - half))
+        paint(color, "▄" * full + "▖" * half)
+        + paint(TRACK, "▄" * (bar - full - half))
         + " " * (GAP + stats_w - len(stats(state)))
         + paint(color, str(left))
         + paint(UI["dim"], f"/{total}")
