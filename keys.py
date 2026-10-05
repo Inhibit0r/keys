@@ -444,6 +444,7 @@ GRADIENT = [  # silver: dark steel up to white and back
     (150, 155, 166),
 ]
 LIQUID = [(0, 110, 40), (40, 200, 70), (150, 255, 60), (40, 200, 70)]
+ARROW_SPEED = 0.08  # rainbow loops per second for the selection arrow: one every 12.5 s
 RAINBOW = [  # the selection arrow
     (255, 214, 0),
     (170, 255, 0),
@@ -679,8 +680,9 @@ def draw(title, items=(), cur=0, notes=(), age=1.0):
         num = paint(UI["dim"], f"{i + 1} ")
         if i == cur:
             bg = CSI + "48;5;236m"
+            arrow = fg(gradient(t * ARROW_SPEED, RAINBOW))
             rows.append(
-                f"{bg}{fg(gradient(t * 0.4, RAINBOW))}❯ {num}{bg}{CSI}1;38;5;231m"
+                f"{bg}{arrow}❯ {num}{bg}{CSI}1;38;5;231m"
                 + item.ljust(width - 8)
                 + CSI
                 + "0m"
