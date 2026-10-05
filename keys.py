@@ -444,6 +444,14 @@ GRADIENT = [  # silver: dark steel up to white and back
     (150, 155, 166),
 ]
 LIQUID = [(0, 110, 40), (40, 200, 70), (150, 255, 60), (40, 200, 70)]
+RAINBOW = [  # the selection arrow
+    (255, 214, 0),
+    (170, 255, 0),
+    (0, 255, 120),
+    (0, 200, 255),
+    (140, 90, 255),
+    (255, 70, 170),
+]
 GAP = 3  # columns on each side of a credit bar
 HEAD_W = 89 + 4 + 17  # banner, gap, flask: the widest the screen gets
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
@@ -672,7 +680,7 @@ def draw(title, items=(), cur=0, notes=(), age=1.0):
         if i == cur:
             bg = CSI + "48;5;236m"
             rows.append(
-                f"{bg}{fg(gradient(t * 0.4))}❯ {num}{bg}{CSI}1;38;5;231m"
+                f"{bg}{fg(gradient(t * 0.4, RAINBOW))}❯ {num}{bg}{CSI}1;38;5;231m"
                 + item.ljust(width - 8)
                 + CSI
                 + "0m"
