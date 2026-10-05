@@ -96,6 +96,7 @@ keys add tavily main      # то же из CLI: метка main, ключ вво
 | `keys next <service>` | следующий ключ по кругу |
 | `keys remove <service> <label>` | забыть ключ (активный остаётся активным) |
 | `keys check [service] [--all]` | остаток кредитов |
+| `keys --version` | версия |
 
 `service` — `tavily` или `firecrawl`. CLI видит новый ключ со следующей команды,
 MCP — после перезапуска сессии Claude Code или Codex.
